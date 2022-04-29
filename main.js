@@ -20,6 +20,7 @@ const audio = $("#audio");
 const playBtn = $(".btn-toggle-play"); // nút play
 const iconPlay = $(".icon-play");
 const iconPause = $(".icon-pause");
+const progress = $("#progress"); // thanh chạy nhạc
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
@@ -130,11 +131,13 @@ const app = {
 
     // xử lý play / pause
     playBtn.onclick = function () {
-      if (isPlaying) { // bài hát đang chạy
+      if (isPlaying) {
+        // bài hát đang chạy
         audio.pause(); // bấm dừng
         iconPause.style.display = "none";
         iconPlay.style.display = "block";
-      } else { // bài hát đang dừng
+      } else {
+        // bài hát đang dừng
         audio.play(); // bấm chạy
         iconPause.style.display = "block";
         iconPlay.style.display = "none";
@@ -144,11 +147,22 @@ const app = {
     };
 
     // xử lý thanh tiến độ nhạc
-    audio.ontimeupdate = function(){
-        console.log(audio.currentTime / audio.duration * 100)
+    audio.ontimeupdate = function () {
+      if (audio.duration) {
+        const progressPercent = Math.floor(
+          (audio.currentTime / audio.duration) * 1000
+        ); // phần trăm thanh nhạc đã chạy
+        progress.value = progressPercent;
+      }
+    };
 
-    }
+    // xử lý tua nhạc
+    progress.onchange = function(e){
+    console.log( (e.target.value / 1000 ) * audio.duration)
+}
   },
+
+  
 
   loadCurrentSong: function () {
     // tải bài hát
@@ -168,4 +182,3 @@ const app = {
 };
 
 app.start();
-
