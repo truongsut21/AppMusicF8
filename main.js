@@ -22,15 +22,16 @@ const iconPlay = $(".icon-play");
 const iconPause = $(".icon-pause");
 const progress = $("#progress"); // thanh chạy nhạc
 const btnNext = $(".btn-next");
+const btnPrev = $(".btn-prev");
 const btnRandom = $(".btn-random");
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
-var isRandom = false // 
+var isRandom = false; //
 const app = {
   currentIndex: 0,
-//   isPlaying: false,
-  isRandom : false,
+  //   isPlaying: false,
+  isRandom: false,
   songs: [
     {
       name: "Đám Cưới Nha?",
@@ -138,33 +139,19 @@ const app = {
       if (isPlaying) {
         // bài hát đang chạy
         audio.pause(); // bấm dừng
-        cdThumbAnimate.pause(); // animate cd dừng
+        app.cdThumbAnimate.pause(); // animate cd dừng
         iconPause.style.display = "none";
         iconPlay.style.display = "block";
       } else {
         // bài hát đang dừng
         audio.play(); // bấm chạy
-        cdThumbAnimate.play(); // animate cd chạy
+        app.cdThumbAnimate.play(); // animate cd chạy
         iconPause.style.display = "block";
         iconPlay.style.display = "none";
       }
 
       isPlaying = !isPlaying;
     };
-
-    // xủ lý đĩa quay / dừng
-    const cdThumbAnimate = cdThumb.animate(
-      [
-        {
-          transform: "rotate(360deg)", // quay 360
-        },
-      ],
-      {
-        duration: 30000, // 10s
-        interations: Infinity,
-      }
-    );
-    cdThumbAnimate.pause(); // dừng sẵn cdthumb
 
     // xử lý thanh tiến độ nhạc
     audio.ontimeupdate = function () {
@@ -184,17 +171,29 @@ const app = {
 
     // xử lý next
     btnNext.onclick = function () {
-      app.nextSong();
-      app.autoPlay();
+      if (isRandom) {
+        app.playRandomSong();
+      } else {
+        app.nextSong();
+        app.autoPlay();
+      }
     };
 
-    // xử lý sự kiện random
-    btnRandom.onclick = function(){
-        isRandom = !isRandom
-        btnRandom.classList.toggle('active', isRandom)
-        console.log(isRandom)
+    // xử lý prev
+    btnPrev.onclick = function () {
+      if (isRandom) {
+        app.playRandomSong();
+      } else {
+        app.prevSong();
+        app.autoPlay();
+      }
+    };
 
-    }
+    // xử lý sự kiện bật / tắt random
+    btnRandom.onclick = function () {
+      isRandom = !isRandom;
+      btnRandom.classList.toggle("active", isRandom);
+    };
   },
 
   // tải bài hát
@@ -205,31 +204,69 @@ const app = {
     audio.src = this.currentSong.musicUrl;
   },
 
-  // chuyển bài nhạc
+  // next bài nhạc
   nextSong: function () {
     if (this.currentIndex >= this.songs.length - 1) {
       this.currentIndex = -1;
     }
     this.currentIndex++;
-    console.log(this.currentIndex);
 
     this.loadCurrentSong();
   },
 
+  // lui bài nhạc
+  prevSong: function () {
+    this.currentIndex--;
+    if (this.currentIndex < 0) {
+      this.currentIndex = this.songs.length - 1;
+    }
+
+    this.loadCurrentSong();
+  },
+
+  // xủ lý đĩa quay / dừng
+  cdThumbAnimate: cdThumb.animate(
+    [
+      {
+        transform: "rotate(360deg)", // quay 360
+      },
+    ],
+    {
+      duration: 30000, // 10s
+      interations: Infinity,
+    }
+  ),
+
   autoPlay: function () {
     audio.play(); // bấm chạy
-    //cdThumbAnimate.play(); // animate cd chạy
+    this.cdThumbAnimate.play(); // animate cd chạy
     isPlaying = true;
     iconPause.style.display = "block";
     iconPlay.style.display = "none";
   },
 
+  // random
+  playRandomSong: function () {
+    let newIndex = 0;
+
+    // lấy currentIndex ngẫu nhiên
+    do {
+      newIndex = Math.floor(Math.random() * this.songs.length);
+    } while (newIndex == this.currentIndex);
+    this.currentIndex = newIndex; // gán giá trị mới random cho currentIndex
+    this.loadCurrentSong();
+    this.autoPlay();
+  },
+
   start: function () {
     this.defineProperties(); // định nghĩa các thuộc tính cho obj
     this.handleEvents(); // lắng nghe sử lý các event
+    this.cdThumbAnimate.pause(); // dừng sẵn cd thumb
     this.loadCurrentSong(); // tải bài hát đầu tiền vào UI khi chạy ứng dụng
     this.render(); // render playList
   },
 };
 
 app.start();
+
+// 1:07
