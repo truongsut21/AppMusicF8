@@ -156,7 +156,7 @@ const app = {
         },
       ],
       {
-        duration: 10000, // 10s
+        duration:  30000, // 10s
         interations: Infinity,
       }
     );
