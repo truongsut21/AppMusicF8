@@ -134,11 +134,13 @@ const app = {
       if (isPlaying) {
         // bài hát đang chạy
         audio.pause(); // bấm dừng
+        cdThumbAnimate.pause() // animate cd dừng
         iconPause.style.display = "none";
         iconPlay.style.display = "block";
       } else {
         // bài hát đang dừng
         audio.play(); // bấm chạy
+        cdThumbAnimate.play()// animate cd chạy
         iconPause.style.display = "block";
         iconPlay.style.display = "none";
       }
@@ -147,17 +149,18 @@ const app = {
     };
 
     // xủ lý đĩa quay / dừng
-    cdThumb.animate(
-        [
-            {
-                transform: 'rotate(360deg)'
-            }
-        ]
-        ,
-            {
-                duration: 10000
-            }
-    )
+    const cdThumbAnimate = cdThumb.animate(
+      [
+        {
+          transform: "rotate(360deg)", // quay 360
+        },
+      ],
+      {
+        duration: 10000, // 10s
+        interations: Infinity,
+      }
+    );
+    cdThumbAnimate.pause() // dừng sẵn cdthumb
 
     // xử lý thanh tiến độ nhạc
     audio.ontimeupdate = function () {
