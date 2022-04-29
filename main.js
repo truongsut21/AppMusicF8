@@ -146,6 +146,19 @@ const app = {
       isPlaying = !isPlaying;
     };
 
+    // xủ lý đĩa quay / dừng
+    cdThumb.animate(
+        [
+            {
+                transform: 'rotate(360deg)'
+            }
+        ]
+        ,
+            {
+                duration: 10000
+            }
+    )
+
     // xử lý thanh tiến độ nhạc
     audio.ontimeupdate = function () {
       if (audio.duration) {
@@ -157,12 +170,11 @@ const app = {
     };
 
     // xử lý tua nhạc
-    progress.onchange = function(e){
-    console.log( (e.target.value / 1000 ) * audio.duration)
-}
+    progress.onchange = function (e) {
+      const seekTime = (e.target.value / 1000) * audio.duration; // value thanh tua nhạc
+      audio.currentTime = seekTime; // set value tua cho thanh nhac khi change
+    };
   },
-
-  
 
   loadCurrentSong: function () {
     // tải bài hát
