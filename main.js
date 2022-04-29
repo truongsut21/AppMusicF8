@@ -144,10 +144,10 @@ const app = {
     };
 
     // xử lý thanh tiến độ nhạc
-    // audio.ontimeUpdate = function(){
-    //     console.log('ád')
-       
-    // }
+    audio.ontimeupdate = function(){
+        console.log(audio.currentTime / audio.duration * 100)
+
+    }
   },
 
   loadCurrentSong: function () {
