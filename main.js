@@ -26,9 +26,10 @@ const btnRandom = $(".btn-random");
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
+var isRandom = false // 
 const app = {
   currentIndex: 0,
-  isPlaying: false,
+//   isPlaying: false,
   isRandom : false,
   songs: [
     {
@@ -217,7 +218,7 @@ const app = {
 
   autoPlay: function () {
     audio.play(); // bấm chạy
-    cdThumbAnimate.play(); // animate cd chạy
+    //cdThumbAnimate.play(); // animate cd chạy
     isPlaying = true;
     iconPause.style.display = "block";
     iconPlay.style.display = "none";
