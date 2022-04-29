@@ -22,12 +22,14 @@ const iconPlay = $(".icon-play");
 const iconPause = $(".icon-pause");
 const progress = $("#progress"); // thanh chạy nhạc
 const btnNext = $(".btn-next");
+const btnRandom = $(".btn-random");
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
 const app = {
   currentIndex: 0,
   isPlaying: false,
+  isRandom : false,
   songs: [
     {
       name: "Đám Cưới Nha?",
@@ -182,25 +184,27 @@ const app = {
     // xử lý next
     btnNext.onclick = function () {
       app.nextSong();
-
-      // sử lý auto chạy khi chuyển bài
-      audio.play(); // bấm chạy
-      cdThumbAnimate.play(); // animate cd chạy
-       isPlaying = true;
-      iconPause.style.display = "block";
-      iconPlay.style.display = "none";
-        
+      app.autoPlay();
     };
+
+    // xử lý sự kiện random
+    btnRandom.onclick = function(){
+        isRandom = !isRandom
+        btnRandom.classList.toggle('active', isRandom)
+        console.log(isRandom)
+
+    }
   },
 
+  // tải bài hát
   loadCurrentSong: function () {
-    // tải bài hát
-
     // set các giá trị mặc định
     heading.textContent = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.imgUrl}')`;
     audio.src = this.currentSong.musicUrl;
   },
+
+  // chuyển bài nhạc
   nextSong: function () {
     if (this.currentIndex >= this.songs.length - 1) {
       this.currentIndex = -1;
@@ -209,6 +213,14 @@ const app = {
     console.log(this.currentIndex);
 
     this.loadCurrentSong();
+  },
+
+  autoPlay: function () {
+    audio.play(); // bấm chạy
+    cdThumbAnimate.play(); // animate cd chạy
+    isPlaying = true;
+    iconPause.style.display = "block";
+    iconPlay.style.display = "none";
   },
 
   start: function () {
