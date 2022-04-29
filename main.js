@@ -21,6 +21,7 @@ const playBtn = $(".btn-toggle-play"); // nút play
 const iconPlay = $(".icon-play");
 const iconPause = $(".icon-pause");
 const progress = $("#progress"); // thanh chạy nhạc
+const btnNext = $(".btn-next");
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
@@ -134,13 +135,13 @@ const app = {
       if (isPlaying) {
         // bài hát đang chạy
         audio.pause(); // bấm dừng
-        cdThumbAnimate.pause() // animate cd dừng
+        cdThumbAnimate.pause(); // animate cd dừng
         iconPause.style.display = "none";
         iconPlay.style.display = "block";
       } else {
         // bài hát đang dừng
         audio.play(); // bấm chạy
-        cdThumbAnimate.play()// animate cd chạy
+        cdThumbAnimate.play(); // animate cd chạy
         iconPause.style.display = "block";
         iconPlay.style.display = "none";
       }
@@ -156,11 +157,11 @@ const app = {
         },
       ],
       {
-        duration:  30000, // 10s
+        duration: 30000, // 10s
         interations: Infinity,
       }
     );
-    cdThumbAnimate.pause() // dừng sẵn cdthumb
+    cdThumbAnimate.pause(); // dừng sẵn cdthumb
 
     // xử lý thanh tiến độ nhạc
     audio.ontimeupdate = function () {
@@ -177,6 +178,19 @@ const app = {
       const seekTime = (e.target.value / 1000) * audio.duration; // value thanh tua nhạc
       audio.currentTime = seekTime; // set value tua cho thanh nhac khi change
     };
+
+    // xử lý next
+    btnNext.onclick = function () {
+      app.nextSong();
+
+      // sử lý auto chạy khi chuyển bài
+      audio.play(); // bấm chạy
+      cdThumbAnimate.play(); // animate cd chạy
+       isPlaying = true;
+      iconPause.style.display = "block";
+      iconPlay.style.display = "none";
+        
+    };
   },
 
   loadCurrentSong: function () {
@@ -186,6 +200,15 @@ const app = {
     heading.textContent = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.imgUrl}')`;
     audio.src = this.currentSong.musicUrl;
+  },
+  nextSong: function () {
+    if (this.currentIndex >= this.songs.length - 1) {
+      this.currentIndex = -1;
+    }
+    this.currentIndex++;
+    console.log(this.currentIndex);
+
+    this.loadCurrentSong();
   },
 
   start: function () {
