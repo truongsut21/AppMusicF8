@@ -6,7 +6,7 @@
  * 5.Next / prev
  * 6. random
  * 7. next / repeat when ened
- * 8. active song 
+ * 8. active song
  * 9. scroll active--------------------- tự nghĩ cách xử lý js
  */
 
@@ -25,12 +25,14 @@ const btnNext = $(".btn-next");
 const btnPrev = $(".btn-prev");
 const btnRandom = $(".btn-random");
 const btnRepeat = $(".btn-repeat");
-const playList = $('.playlist')
+const playList = $(".playlist");
+const elSong = $(".song");
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
 var isRandom = false; // dag tắt random
-var isRepeat = false; // đang tắt repeat
+var isRepeat = false; // đang tắt repeat.
+
 const app = {
   currentIndex: 0,
   //   isPlaying: false,
@@ -96,8 +98,12 @@ const app = {
   render: function () {
     // render các dữ liệu songs ra HTML
     const htmls = this.songs.map((song, index) => {
+      console.log(app.currentIndex)
+      console.log('a',index)
       return `
-            <div class="song ${index === this.currentIndex? 'active' : ''} data-index=${index}">
+            <div class="song ${
+              index === this.currentIndex ? "active" : ""
+            }"  data-index=${index}>
             <div class="thumb" style="background-image: url('${song.imgUrl}')">
             </div>
             <div class="body">
@@ -212,7 +218,7 @@ const app = {
       }
     }),
       // xử lặp lại bài hát
-      btnRepeat.onclick = function () {
+      (btnRepeat.onclick = function () {
         isRepeat = !isRepeat;
         btnRepeat.classList.toggle("active", isRepeat);
         if (isRepeat) {
@@ -220,14 +226,41 @@ const app = {
           isRandom = true;
           btnRandom.click();
         }
-      };
+      });
 
-      // xử lý click vào list song html
-      playList.onclick = function(e){
-        // xử lý khi click vào song
-        console.log(e.target)
+    // xử lý click vào list song html
+    playList.onclick = function (e) {
+      const songNode = e.target.closest('.song:not(.active)')
+     
+      if(songNode || e.target.closest('.option')){
+        if(songNode){
+          app.currentIndex = Number(songNode.getAttribute("data-index")) // ép kiểu
+         
+          app.loadCurrentSong();
+          app.autoPlay();
+        }
+
+        if(e.target.closest('.option')){
+          console.log('da chon option')
+        }
       }
 
+
+
+
+
+
+
+      // xử lý khi click vào song
+      // $('.song > .body').click(function (e) { // xử lý các sự kiện khi click trúng các elment con thì sẽ bắn ra sự kiện prarent đưuọc chọn
+      //   e.stopPropagation();
+      // });
+      // console.log([e.target]);
+      // console.log(e.target.closest('.song').getAttribute("data-index")) // khi bấm vào sự kiện tự động tìm chon class .song gần nhất
+      // console.log(e.target.closest('.option'))
+
+      // closest tìm kiếm phần tử trên nó gần nhất
+    };
   },
 
   // tải bài hát
@@ -256,6 +289,7 @@ const app = {
     }
 
     this.loadCurrentSong();
+    
   },
 
   // xủ lý đĩa quay / dừng
@@ -277,7 +311,8 @@ const app = {
     isPlaying = true;
     iconPause.style.display = "block";
     iconPlay.style.display = "none";
-    this.render() // render lại để nhận active song HTML
+    
+    this.render(); // render lại để nhận active song HTML
   },
 
   // random
