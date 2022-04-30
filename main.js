@@ -6,8 +6,8 @@
  * 5.Next / prev
  * 6. random
  * 7. next / repeat when ened
- * 8. active song --------------------- tự nghĩ cách xử lý js
- * 9. scroll active
+ * 8. active song 
+ * 9. scroll active--------------------- tự nghĩ cách xử lý js
  */
 
 const $ = document.querySelector.bind(document);
@@ -25,6 +25,7 @@ const btnNext = $(".btn-next");
 const btnPrev = $(".btn-prev");
 const btnRandom = $(".btn-random");
 const btnRepeat = $(".btn-repeat");
+const playList = $('.playlist')
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
@@ -96,7 +97,7 @@ const app = {
     // render các dữ liệu songs ra HTML
     const htmls = this.songs.map((song, index) => {
       return `
-            <div class="song ${index === this.currentIndex? 'active' : ''}">
+            <div class="song ${index === this.currentIndex? 'active' : ''} data-index=${index}">
             <div class="thumb" style="background-image: url('${song.imgUrl}')">
             </div>
             <div class="body">
@@ -211,7 +212,7 @@ const app = {
       }
     }),
       // xử lặp lại bài hát
-      (btnRepeat.onclick = function () {
+      btnRepeat.onclick = function () {
         isRepeat = !isRepeat;
         btnRepeat.classList.toggle("active", isRepeat);
         if (isRepeat) {
@@ -219,7 +220,14 @@ const app = {
           isRandom = true;
           btnRandom.click();
         }
-      });
+      };
+
+      // xử lý click vào list song html
+      playList.onclick = function(e){
+        // xử lý khi click vào song
+        console.log(e.target)
+      }
+
   },
 
   // tải bài hát
