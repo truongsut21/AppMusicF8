@@ -6,7 +6,7 @@
  * 5.Next / prev
  * 6. random
  * 7. next / repeat when ened
- * 8. active song
+ * 8. active song --------------------- tự nghĩ cách xử lý js
  * 9. scroll active
  */
 
@@ -24,10 +24,12 @@ const progress = $("#progress"); // thanh chạy nhạc
 const btnNext = $(".btn-next");
 const btnPrev = $(".btn-prev");
 const btnRandom = $(".btn-random");
+const btnRepeat = $(".btn-repeat");
 
 const cd = $(".cd");
 var isPlaying = false; // bai hat dừng
-var isRandom = false; //
+var isRandom = false; // dag tắt random
+var isRepeat = false; // đang tắt repeat
 const app = {
   currentIndex: 0,
   //   isPlaying: false,
@@ -92,9 +94,9 @@ const app = {
 
   render: function () {
     // render các dữ liệu songs ra HTML
-    const htmls = this.songs.map((song) => {
+    const htmls = this.songs.map((song, index) => {
       return `
-            <div class="song">
+            <div class="song ${index === this.currentIndex? 'active' : ''}">
             <div class="thumb" style="background-image: url('${song.imgUrl}')">
             </div>
             <div class="body">
@@ -193,7 +195,31 @@ const app = {
     btnRandom.onclick = function () {
       isRandom = !isRandom;
       btnRandom.classList.toggle("active", isRandom);
+      if (isRandom) {
+        // tắt repeat  khi bật random
+        isRepeat = true;
+        btnRepeat.click();
+      }
     };
+
+    // xử lý audio next khi kết thúc
+    (audio.onended = function () {
+      if (isRepeat) {
+        audio.play();
+      } else {
+        btnNext.click();
+      }
+    }),
+      // xử lặp lại bài hát
+      (btnRepeat.onclick = function () {
+        isRepeat = !isRepeat;
+        btnRepeat.classList.toggle("active", isRepeat);
+        if (isRepeat) {
+          // tắt random khi bật repeat
+          isRandom = true;
+          btnRandom.click();
+        }
+      });
   },
 
   // tải bài hát
@@ -238,11 +264,12 @@ const app = {
   ),
 
   autoPlay: function () {
-    audio.play(); // bấm chạy
+    audio.play(); // auto chay
     this.cdThumbAnimate.play(); // animate cd chạy
     isPlaying = true;
     iconPause.style.display = "block";
     iconPlay.style.display = "none";
+    this.render() // render lại để nhận active song HTML
   },
 
   // random
