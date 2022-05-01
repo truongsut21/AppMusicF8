@@ -8,15 +8,19 @@
  * 7. next / repeat when ened
  * 8. active song
  * 9. scroll active--------------------- tự nghĩ cách xử lý js
- */
+ * 10. lưu setting vào local
+ *  */
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
+
+const PLAYER_STORAGE_KEY = "SETING_PLAYER_MUSIC_F8"; // lưu giá trị israndom, isRepeat vào local
 
 // các giá trị tiêu đề, avata, nhạc của bài hát
 const heading = $("header h2"); // lấy thể h2 trong header
 const cdThumb = $(".cd-thumb"); // img cd
 const audio = $("#audio");
+
 const playBtn = $(".btn-toggle-play"); // nút play
 const iconPlay = $(".icon-play");
 const iconPause = $(".icon-pause");
@@ -33,10 +37,11 @@ var isPlaying = false; // bai hat dừng
 var isRandom = false; // dag tắt random
 var isRepeat = false; // đang tắt repeat.
 
+// gía trị lưu về của local PLAYER_STORAGE_KEY
+var config = JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {}; // nếu vế 1 không tồn tại thì lấy vế 2
+
 const app = {
   currentIndex: 0,
-  //   isPlaying: false,
-  isRandom: false,
   songs: [
     {
       name: "Đám Cưới Nha?",
@@ -95,11 +100,13 @@ const app = {
     },
   ],
 
+  setConfig: function (key, value) {
+    config[key] = value;
+    localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(config));
+  },
   render: function () {
     // render các dữ liệu songs ra HTML
     const htmls = this.songs.map((song, index) => {
-      console.log(app.currentIndex)
-      console.log('a',index)
       return `
             <div class="song ${
               index === this.currentIndex ? "active" : ""
@@ -201,12 +208,16 @@ const app = {
     // xử lý sự kiện bật / tắt random
     btnRandom.onclick = function () {
       isRandom = !isRandom;
+
       btnRandom.classList.toggle("active", isRandom);
       if (isRandom) {
         // tắt repeat  khi bật random
         isRepeat = true;
         btnRepeat.click();
       }
+
+      app.setConfig("isRandom", isRandom); // luu vao local
+      app.setConfig("isRepeat", isRepeat); // luu vao local
     };
 
     // xử lý audio next khi kết thúc
@@ -226,40 +237,36 @@ const app = {
           isRandom = true;
           btnRandom.click();
         }
+
+        app.setConfig("isRandom", isRandom); // luu vao local
+        app.setConfig("isRepeat", isRepeat); // luu vao local
       });
 
     // xử lý click vào list song html
     playList.onclick = function (e) {
-      const songNode = e.target.closest('.song:not(.active)')
-     
-      if(songNode || e.target.closest('.option')){
-        if(songNode){
-          app.currentIndex = Number(songNode.getAttribute("data-index")) // ép kiểu
-         
+      const songNode = e.target.closest(".song:not(.active)");
+
+      if (songNode || e.target.closest(".option")) {
+        if (songNode) {
+          app.currentIndex = Number(songNode.getAttribute("data-index")); // ép kiểu
+
           app.loadCurrentSong();
           app.autoPlay();
         }
 
-        if(e.target.closest('.option')){
-          console.log('da chon option')
+        if (e.target.closest(".option")) {
+          console.log("da chon option");
         }
       }
+    };
 
-
-
-
-
-
-
-      // xử lý khi click vào song
-      // $('.song > .body').click(function (e) { // xử lý các sự kiện khi click trúng các elment con thì sẽ bắn ra sự kiện prarent đưuọc chọn
-      //   e.stopPropagation();
-      // });
-      // console.log([e.target]);
-      // console.log(e.target.closest('.song').getAttribute("data-index")) // khi bấm vào sự kiện tự động tìm chon class .song gần nhất
-      // console.log(e.target.closest('.option'))
-
-      // closest tìm kiếm phần tử trên nó gần nhất
+    // xử lý audio next khi kết thúc
+    audio.onended = function () {
+      if (isRepeat) {
+        audio.play();
+      } else {
+        btnNext.click();
+      }
     };
   },
 
@@ -269,6 +276,21 @@ const app = {
     heading.textContent = this.currentSong.name;
     cdThumb.style.backgroundImage = `url('${this.currentSong.imgUrl}')`;
     audio.src = this.currentSong.musicUrl;
+  },
+
+  // load setting local
+  loadConfig: function() {
+    isRandom = config.isRandom
+    isRepeat = config.isRepeat
+
+
+  },
+
+  // load active cho random / repeat 
+
+  loadSettingActiveLocal: function() {
+    btnRepeat.classList.toggle("active", isRepeat);
+    btnRandom.classList.toggle("active", isRandom);
   },
 
   // next bài nhạc
@@ -289,7 +311,6 @@ const app = {
     }
 
     this.loadCurrentSong();
-    
   },
 
   // xủ lý đĩa quay / dừng
@@ -311,7 +332,7 @@ const app = {
     isPlaying = true;
     iconPause.style.display = "block";
     iconPlay.style.display = "none";
-    
+
     this.render(); // render lại để nhận active song HTML
   },
 
@@ -329,6 +350,8 @@ const app = {
   },
 
   start: function () {
+    this.loadConfig() // cấu hình setting random, repeat  lần đầu khi mở trang lấy dữ  liệu từ local
+    this.loadSettingActiveLocal() // cấu hình setting active class random, repeat  lần đầu khi mở trang lấy dữ
     this.defineProperties(); // định nghĩa các thuộc tính cho obj
     this.handleEvents(); // lắng nghe sử lý các event
     this.cdThumbAnimate.pause(); // dừng sẵn cd thumb
