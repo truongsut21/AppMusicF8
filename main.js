@@ -53,7 +53,7 @@ const app = {
     {
       name: "Ngày Đầu Tiên",
       singer: "Đức Phúc",
-      musicUrl: "https://www.nhaccuatui.com/mh/auto/YhHm3pfxcuKQ",
+      musicUrl: "./music/NgayDauTien.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/155/154910.jpg",
     },
 
