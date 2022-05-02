@@ -46,16 +46,14 @@ const app = {
     {
       name: "Đám Cưới Nha?",
       singer: "Hồng Thanh; DJ Mie",
-      musicUrl:
-        "./music/DamCuoiNha.mp3",
+      musicUrl: "./music/DamCuoiNha.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/158/157878.jpg",
     },
 
     {
       name: "Ngày Đầu Tiên",
       singer: "Đức Phúc",
-      musicUrl:
-        "https://www.nhaccuatui.com/mh/auto/YhHm3pfxcuKQ",
+      musicUrl: "https://www.nhaccuatui.com/mh/auto/YhHm3pfxcuKQ",
       imgUrl: "https://data.chiasenhac.com/data/cover/155/154910.jpg",
     },
 
@@ -279,16 +277,14 @@ const app = {
   },
 
   // load setting local
-  loadConfig: function() {
-    isRandom = config.isRandom
-    isRepeat = config.isRepeat
-
-
+  loadConfig: function () {
+    isRandom = config.isRandom;
+    isRepeat = config.isRepeat;
   },
 
-  // load active cho random / repeat 
+  // load active cho random / repeat
 
-  loadSettingActiveLocal: function() {
+  loadSettingActiveLocal: function () {
     btnRepeat.classList.toggle("active", isRepeat);
     btnRandom.classList.toggle("active", isRandom);
   },
@@ -350,8 +346,8 @@ const app = {
   },
 
   start: function () {
-    this.loadConfig() // cấu hình setting random, repeat  lần đầu khi mở trang lấy dữ  liệu từ local
-    this.loadSettingActiveLocal() // cấu hình setting active class random, repeat  lần đầu khi mở trang lấy dữ
+    this.loadConfig(); // cấu hình setting random, repeat  lần đầu khi mở trang lấy dữ  liệu từ local
+    this.loadSettingActiveLocal(); // cấu hình setting active class random, repeat  lần đầu khi mở trang lấy dữ
     this.defineProperties(); // định nghĩa các thuộc tính cho obj
     this.handleEvents(); // lắng nghe sử lý các event
     this.cdThumbAnimate.pause(); // dừng sẵn cd thumb
