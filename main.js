@@ -61,7 +61,7 @@ const app = {
       name: "Ánh Nắng Của Anh",
       singer: "Đức Phúc",
       musicUrl:
-        "https://data3.chiasenhac.com/downloads/1751/5/1750325-63589c26/128/Anh%20Nang%20Cua%20Anh%20-%20Duc%20Phuc.mp3",
+        "./music/AnhNangCuaAnh.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/69/68690.jpg",
     },
 
@@ -69,7 +69,7 @@ const app = {
       name: "Bông Hoa Đẹp Nhất",
       singer: "Quân A.P",
       musicUrl:
-        "https://data3.chiasenhac.com/downloads/2116/5/2115047-a7b21f25/128/Bong%20Hoa%20Dep%20Nhat%20-%20Quan%20A_P.mp3",
+      "./music/BongHoaDepNhat.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/128/127105.jpg",
     },
 
@@ -77,7 +77,7 @@ const app = {
       name: "See Tình (Cukak Remix)",
       singer: "Cukak; Hoàng Thùy Linh",
       musicUrl:
-        "https://data.chiasenhac.com/down2/2237/5/2236543-fec21a16/128/See%20Tinh%20Cukak%20Remix_%20-%20Cukak_%20Hoang%20Thu.mp3",
+      "./music/CanGiHon.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/160/159527.jpg",
     },
 
@@ -85,7 +85,7 @@ const app = {
       name: "Lạc Trôi",
       singer: "Sơn Tùng M-TP",
       musicUrl:
-        "https://data37.chiasenhac.com/downloads/1897/5/1896718-b91ec523/128/Lac%20Troi%20-%20Son%20Tung%20M-TP.mp3",
+      "./music/LacTroi.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/87/86272.jpg",
     },
 
@@ -93,7 +93,7 @@ const app = {
       name: "Muộn Rồi Mà Sao Còn",
       singer: "Sơn Tùng M-TP",
       musicUrl:
-        "https://data.chiasenhac.com/down2/2169/5/2168156-4608576a/128/Muon%20Roi%20Ma%20Sao%20Con%20-%20Son%20Tung%20M-TP.mp3",
+      "./music/MuonRoiMaSaoCon.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/140/139611.jpg",
     },
   ],
