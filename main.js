@@ -47,7 +47,7 @@ const app = {
       name: "Đám Cưới Nha?",
       singer: "Hồng Thanh; DJ Mie",
       musicUrl:
-        "https://data.chiasenhac.com/down2/2232/5/2231831-3e0343cf/128/Dam%20Cuoi%20Nha_%20-%20Hong%20Thanh_%20DJ%20Mie.mp3",
+        "./music/DamCuoiNha.mp3",
       imgUrl: "https://data.chiasenhac.com/data/cover/158/157878.jpg",
     },
 
