@@ -191,6 +191,8 @@ const app = {
         app.nextSong();
         app.autoPlay();
       }
+
+      app.scrollToActiveSong();
     };
 
     // xử lý prev
@@ -201,6 +203,8 @@ const app = {
         app.prevSong();
         app.autoPlay();
       }
+
+      app.scrollToActiveSong();
     };
 
     // xử lý sự kiện bật / tắt random
@@ -266,6 +270,23 @@ const app = {
         btnNext.click();
       }
     };
+  },
+
+  // xử lý sự kiện scroll click auto scroll
+  scrollToActiveSong: function () {
+    setTimeout(function () {
+      if ((app.currentIndex === 0, 1)) {
+        $(".song.active").scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+        });
+      } else {
+        $(".song.active").scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    }, 80);
   },
 
   // tải bài hát
